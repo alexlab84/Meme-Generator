@@ -1,0 +1,13 @@
+@import './core/reset';
+@import './core/variables';
+
+.App {
+    text-align: center;
+    padding: 20px;
+  }
+
+.img {
+    width: 500px;
+    height: 500px;
+    margin-top: 60px;
+}
