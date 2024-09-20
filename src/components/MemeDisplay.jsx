@@ -1,62 +1,77 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function MemeDisplay({ meme, topText, bottomText, topTextColor, bottomTextColor }) {
-  const [topPosition, setTopPosition] = useState({ x: 50, y: 10 }); // Posición inicial
-  const [bottomPosition, setBottomPosition] = useState({ x: 50, y: 90 });
 
-  const handleDragStart = (e, position) => {
-    const imgRect = e.target.parentElement.getBoundingClientRect();
-    e.dataTransfer.setData('text/plain', JSON.stringify({
-      offsetX: e.clientX - imgRect.left,
-      offsetY: e.clientY - imgRect.top,
-      position,
-    }));
+function MemeDisplay({
+  meme,
+  topText,
+  bottomText,
+  selectedFont,
+  topTextColor,
+  bottomTextColor,
+  topTextPosition,
+  bottomTextPosition,
+  setTopTextPosition,
+  setBottomTextPosition,
+}) {
+  // Manejo del arrastre del texto
+  const handleDragStart = (e, textType) => {
+    const offsetX = e.clientX - e.target.getBoundingClientRect().left;
+    const offsetY = e.clientY - e.target.getBoundingClientRect().top;
+    e.dataTransfer.setData('textType', textType);
+    e.dataTransfer.setData('offsetX', offsetX);
+    e.dataTransfer.setData('offsetY', offsetY);
   };
 
   const handleDrop = (e) => {
-    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const imgRect = e.target.getBoundingClientRect();
-    const dropX = ((e.clientX - imgRect.left) / imgRect.width) * 100;
-    const dropY = ((e.clientY - imgRect.top) / imgRect.height) * 100;
+    const textType = e.dataTransfer.getData('textType');
+    const offsetX = e.dataTransfer.getData('offsetX');
+    const offsetY = e.dataTransfer.getData('offsetY');
+    const x = e.clientX - e.target.getBoundingClientRect().left - offsetX;
+    const y = e.clientY - e.target.getBoundingClientRect().top - offsetY;
 
-    if (data.position === 'top') {
-      setTopPosition({ x: dropX, y: dropY });
-    } else {
-      setBottomPosition({ x: dropX, y: dropY });
+    if (textType === 'top') {
+      setTopTextPosition({ x, y });
+    } else if (textType === 'bottom') {
+      setBottomTextPosition({ x, y });
     }
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault(); // Permite el drop
+    e.preventDefault();
   };
 
   return (
-    <div className='containerMeme' onDragOver={handleDragOver} onDrop={handleDrop}>
-      <img className='img' src={meme.url} alt={meme.name} />
-      
+    <div className="containerMeme" onDrop={handleDrop} onDragOver={handleDragOver} style={{ position: 'relative' }}>
+      <img className="img" src={meme.url} alt={meme.name} />
+
+      {/* Texto superior arrastrable */}
       <h2
-        className='textTop'
-        style={{
-          left: `${topPosition.x}%`,
-          top: `${topPosition.y}%`,
-          color: topTextColor,
-        }}
+        className="textTop"
         draggable
         onDragStart={(e) => handleDragStart(e, 'top')}
+        style={{
+          position: 'absolute',
+          left: `${topTextPosition.x}px`,
+          top: `${topTextPosition.y}px`,
+          fontFamily: selectedFont,
+          color: topTextColor,
+        }}
       >
         {topText}
       </h2>
-      
+
+      {/* Texto inferior arrastrable */}
       <h2
-        className='textBottom'
-        style={{
-          left: `${bottomPosition.x}%`,
-          top: `${bottomPosition.y}%`,
-          color: bottomTextColor,
-        }}
+        className="textBottom"
         draggable
         onDragStart={(e) => handleDragStart(e, 'bottom')}
+        style={{
+          position: 'absolute',
+          left: `${bottomTextPosition.x}px`,
+          top: `${bottomTextPosition.y}px`,
+          fontFamily: selectedFont,
+          color: bottomTextColor,
+        }}
       >
         {bottomText}
       </h2>
@@ -68,8 +83,13 @@ MemeDisplay.propTypes = {
   meme: PropTypes.object.isRequired,
   topText: PropTypes.string.isRequired,
   bottomText: PropTypes.string.isRequired,
-  topTextColor: PropTypes.string,
-  bottomTextColor: PropTypes.string,
+  selectedFont: PropTypes.string.isRequired,
+  topTextColor: PropTypes.string.isRequired,
+  bottomTextColor: PropTypes.string.isRequired,
+  topTextPosition: PropTypes.object.isRequired,
+  bottomTextPosition: PropTypes.object.isRequired,
+  setTopTextPosition: PropTypes.func.isRequired,
+  setBottomTextPosition: PropTypes.func.isRequired,
 };
 
 export default MemeDisplay;
