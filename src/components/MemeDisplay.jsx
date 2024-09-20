@@ -1,5 +1,7 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
-
+import { toPng } from 'html-to-image';
+import { saveAs } from 'file-saver';
 
 function MemeDisplay({
   meme,
@@ -13,6 +15,8 @@ function MemeDisplay({
   setTopTextPosition,
   setBottomTextPosition,
 }) {
+  const memeRef = useRef(null); // Creamos una referencia para el contenedor del meme
+
   // Manejo del arrastre del texto
   const handleDragStart = (e, textType) => {
     const offsetX = e.clientX - e.target.getBoundingClientRect().left;
@@ -40,41 +44,67 @@ function MemeDisplay({
     e.preventDefault();
   };
 
+  // Función para descargar el meme
+  const handleDownloadMeme = () => {
+    toPng(memeRef.current)
+      .then((dataUrl) => {
+        saveAs(dataUrl, 'meme.png');
+      })
+      .catch((err) => {
+        console.error('Error al generar la imagen del meme', err);
+      });
+  };
+
   return (
-    <div className="containerMeme" onDrop={handleDrop} onDragOver={handleDragOver} style={{ position: 'relative' }}>
-      <img className="img" src={meme.url} alt={meme.name} />
-
-      {/* Texto superior arrastrable */}
-      <h2
-        className="textTop"
-        draggable
-        onDragStart={(e) => handleDragStart(e, 'top')}
-        style={{
-          position: 'absolute',
-          left: `${topTextPosition.x}px`,
-          top: `${topTextPosition.y}px`,
-          fontFamily: selectedFont,
-          color: topTextColor,
-        }}
+    <div>
+      <div
+        className="containerMeme"
+        ref={memeRef}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        style={{ position: 'relative' }}
       >
-        {topText}
-      </h2>
+        
+        <img className="img" src={meme.url} alt={meme.name} />
 
-      {/* Texto inferior arrastrable */}
-      <h2
-        className="textBottom"
-        draggable
-        onDragStart={(e) => handleDragStart(e, 'bottom')}
-        style={{
-          position: 'absolute',
-          left: `${bottomTextPosition.x}px`,
-          top: `${bottomTextPosition.y}px`,
-          fontFamily: selectedFont,
-          color: bottomTextColor,
-        }}
-      >
-        {bottomText}
-      </h2>
+        {/* Texto superior arrastrable */}
+        <h2
+          className="textTop"
+          draggable
+          onDragStart={(e) => handleDragStart(e, 'top')}
+          style={{
+            position: 'absolute',
+            left: `${topTextPosition.x}px`,
+            top: `${topTextPosition.y}px`,
+            fontFamily: selectedFont,
+            color: topTextColor,
+          }}
+        >
+          {topText}
+        </h2>
+
+        {/* Texto inferior arrastrable */}
+        <h2
+          className="textBottom"
+          draggable
+          onDragStart={(e) => handleDragStart(e, 'bottom')}
+          style={{
+            position: 'absolute',
+            left: `${bottomTextPosition.x}px`,
+            top: `${bottomTextPosition.y}px`,
+            fontFamily: selectedFont,
+            color: bottomTextColor,
+          }}
+        >
+          {bottomText}
+        </h2>
+        
+      </div>
+
+      {/* Botón para descargar el meme */}
+      <button onClick={handleDownloadMeme} className="btn">
+        Descarga tu meme
+      </button>
     </div>
   );
 }
