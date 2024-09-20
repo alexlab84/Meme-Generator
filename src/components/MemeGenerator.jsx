@@ -9,6 +9,10 @@ function MemeGenerator({ selectedFont, topTextColor, bottomTextColor }) {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
 
+  // Estado para las posiciones de los textos
+  const [topTextPosition, setTopTextPosition] = useState({ x: 50, y: 10 });
+  const [bottomTextPosition, setBottomTextPosition] = useState({ x: 50, y: 90 });
+
   useEffect(() => {
     fetch('https://api.imgflip.com/get_memes')
       .then((response) => response.json())
@@ -39,6 +43,10 @@ function MemeGenerator({ selectedFont, topTextColor, bottomTextColor }) {
           selectedFont={selectedFont}
           topTextColor={topTextColor}
           bottomTextColor={bottomTextColor}
+          topTextPosition={topTextPosition}
+          bottomTextPosition={bottomTextPosition}
+          setTopTextPosition={setTopTextPosition}
+          setBottomTextPosition={setBottomTextPosition}
         />
       )}
     </div>
