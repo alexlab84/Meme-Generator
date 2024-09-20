@@ -47,24 +47,18 @@
 }
 
 .textTop {
-  color: $secondColor;
+  
   font-size: 2rem;
   text-shadow: 2px 2px 5px black;
-  position: absolute; /* Cambiado para permitir la superposición */
-  left: 50%; /* Centrado horizontalmente */
-  transform: translateX(-50%); /* Para centrar el texto */
-  top: 10%; /* Ajusta la posición inicial */
+  
   cursor: move; /* Indica que se puede mover */
 }
 
 .textBottom {
-  color: $secondColor;
+  
   font-size: 2rem;
   text-shadow: 2px 2px 5px black;
-  position: absolute; /* Cambiado para permitir la superposición */
-  left: 50%; /* Centrado horizontalmente */
-  transform: translateX(-50%); /* Para centrar el texto */
-  bottom: 10%; /* Ajusta la posición inicial */
+  
   cursor: move; /* Indica que se puede mover */
 }
 
