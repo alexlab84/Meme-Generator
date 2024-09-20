@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 function MemeForm({ memes, topText, bottomText, setTopText, setBottomText, handleSelectMeme }) {
   return (
     <div>
-      <h3>Choose a meme template:</h3>
-      <select onChange={(e) => handleSelectMeme(memes.find(meme => meme.id === e.target.value))}>
+      <h3 className='secondTitle'>Choose a meme template:</h3>
+      <select className='select' onChange={(e) => handleSelectMeme(memes.find(meme => meme.id === e.target.value))}>
         <option value="">Select a meme</option>
         {memes.map((meme) => (
           <option key={meme.id} value={meme.id}>
@@ -16,12 +16,14 @@ function MemeForm({ memes, topText, bottomText, setTopText, setBottomText, handl
 
       <div>
         <input
+          className='input'
           type="text"
           placeholder="Top Text"
           value={topText}
           onChange={(e) => setTopText(e.target.value)}
         />
         <input
+          className='input'
           type="text"
           placeholder="Bottom Text"
           value={bottomText}

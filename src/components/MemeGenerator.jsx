@@ -1,15 +1,14 @@
-
 import { useState, useEffect } from 'react';
 import MemeForm from './MemeForm';
 import MemeDisplay from './MemeDisplay';
+import PropTypes from 'prop-types';
 
-function MemeGenerator() {
+function MemeGenerator({ selectedFont, topTextColor, bottomTextColor }) {
   const [memes, setMemes] = useState([]);
   const [selectedMeme, setSelectedMeme] = useState(null);
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
 
-  // Obtener los memes desde la API de Imgflip
   useEffect(() => {
     fetch('https://api.imgflip.com/get_memes')
       .then((response) => response.json())
@@ -18,7 +17,6 @@ function MemeGenerator() {
       });
   }, []);
 
-  // Manejar la selección de memes
   const handleSelectMeme = (meme) => {
     setSelectedMeme(meme);
   };
@@ -38,10 +36,19 @@ function MemeGenerator() {
           meme={selectedMeme}
           topText={topText}
           bottomText={bottomText}
+          selectedFont={selectedFont}
+          topTextColor={topTextColor}
+          bottomTextColor={bottomTextColor}
         />
       )}
     </div>
   );
 }
+
+MemeGenerator.propTypes = {
+  selectedFont: PropTypes.string.isRequired,
+  topTextColor: PropTypes.string.isRequired,
+  bottomTextColor: PropTypes.string.isRequired,
+};
 
 export default MemeGenerator;
