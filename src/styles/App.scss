@@ -42,6 +42,7 @@
 
 .containerMeme {
   position: relative; /* Permitir la superposición */
+  display: inline-block; /* Para evitar que se extienda todo el ancho */
   margin: 20px 0; /* Espacio alrededor del meme */
 }
 
@@ -87,15 +88,16 @@
 }
 
 .btn {
-  margin-left: 20px;
-  margin-bottom: 20px;
-  padding: 10px;
+  
+  
+  
+  padding: 15px;
   background-color: $color;
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .btn:hover {

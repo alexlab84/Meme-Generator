@@ -102,9 +102,11 @@ function MemeDisplay({
       </div>
 
       {/* Botón para descargar el meme */}
+      <div>
       <button onClick={handleDownloadMeme} className="btn">
         Descarga tu meme
       </button>
+      </div>
     </div>
   );
 }
